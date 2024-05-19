@@ -1,4 +1,4 @@
-"""
+
 # If we need to pull data from youtube API
 import googleapiclient.discovery
 api_service_name = "youtube"
@@ -255,4 +255,3 @@ for i in range(len(comment_data)):
     # Execute the insert query with data
     cursor.execute(insert_query, data)
     mydb.commit()
-"""
