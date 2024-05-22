@@ -42,7 +42,7 @@ if st.button('Enter') and channel_id:
         data = cursor.fetchall()
         if len(data) > 0:
             a = len(data)
-            print("This channel Id is present in DB")
+            st.write("This channel Id is present in DB")
         else:
             a = 0
         return a
