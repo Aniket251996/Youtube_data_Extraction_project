@@ -63,15 +63,13 @@ def execute_query(option):
             st.write("No results found.")
 #queation 4
     if option == "How many comments were made on each video, and what are their corresponding video names?":
-        query = """select count(c.comment_id) as comment_count,c.video_id as video_id,v.vedio_name as video_name from project.comment as c
-                    inner join project.video as v on v.video_id = c.video_id
-                    group by c.video_id,v.vedio_name;
+        query = """select video_id as video_id, vedio_name as video_name, commentCount as comment_count from video
                 """
         cursor.execute(query)
         results = cursor.fetchall()
         st.write("How many comments were made on each video, and what are their corresponding video names?")
         if results:
-            columns = ["Comment Count","Video ID", "Video Name"]
+            columns = ["Video ID", "Video Name","Comment Count"]
             results = [(str(row[0]), str(row[1]),str(row[2])) for row in results]
             st.table([columns] + results)
         else:
@@ -187,24 +185,17 @@ def execute_query(option):
             st.write("No results found.")       
 # Question 10
     if option == "Which videos have the highest number of comments, and what are their corresponding channel names?":
-        query = """SELECT v.vedio_name, c.channel_name
-                    FROM video AS v
-                    JOIN channel AS c ON v.channel_id = c.channel_id
-                    JOIN (
-                        SELECT c.video_id, COUNT(c.comment_id) AS comment_count
-                        FROM comment AS c
-                        GROUP BY c.video_id
-                    ) AS comment_counts
-                    ON v.video_id = comment_counts.video_id
-                    ORDER BY comment_counts.comment_count DESC
-                    LIMIT 1;
+        query = """select v.vedio_name,c.channel_name, v.commentCount from project.video as v
+                    inner join project.channel as c on v.channel_id = c.channel_id
+                    order by v.commentCount desc
+                    limit 1;
                 """
         cursor.execute(query)
         results = cursor.fetchall()
         st.write("Videos with the highest number of comments and their corresponding channel names:")
         if results:
-            columns = ["Video Name", "Channel Name"]
-            results = [(str(row[0]), str(row[1])) for row in results]
+            columns = ["Video name","Channel Name", "Comment count"]
+            results = [(str(row[0]), str(row[1]),str(row[2])) for row in results]
             st.table([columns] + results)
         else:
             st.write("No results found.")
